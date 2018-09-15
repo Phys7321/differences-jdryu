@@ -15,15 +15,20 @@ if ~isnumeric(x)
 end
 if ~isa(F,'function_handle')
     if isnumeric(F)
-      xc = chop(x); % method for data depends on how you assign dy to xc
-      dy = diff(F)./diff(x); 
+      xc = chop(x, 'b'); % method for data depends on how you assign dy to xc
+      dy = diff(F)./diff(x);
+      if isequal(varargin{1},'d2')
+          xc = chop(xc, 'f');
+          dx = chop(diff(x), 'b');
+          dy = diff(dy)./dx;
+      end
       varargin{1} = 'data';
     else
       error('First input must be a function handle or a numeric array')
     end
 end
 
-n=length(x);
+n = length(x);
 dx = diff(x);
 
 switch varargin{1}
@@ -35,12 +40,36 @@ switch varargin{1}
         xc = x(2:n);
     case 'cd'
         dy = (F(x(1:n-1)+0.5*dx) - F(x(1:n-1)-0.5*dx))./dx;
-        xc = chop(x);
+        xc = chop(x, 'b');
     case 'ed'
         half = (F(x(1:n-1)+0.25*dx) - F(x(1:n-1)-0.25*dx))./(0.5*dx); 
         full = (F(x(1:n-1)+0.5*dx) - F(x(1:n-1)-0.5*dx))./dx;
         dy = (4/3).*half - (1/3).*full;
-        xc = chop(x);
+        xc = chop(x, 'b');
+    case 'd2'
+        dx = chop(dx, 'b');
+        xc = chop(x, 'f');
+        xc = chop(xc, 'b');
+        dy = (F(x(3:n)) - 2*F(x(2:n-1)) + F(x(1:n-2)))./(dx.^2);
+    case 'o2'
+        dx = chop(dx, 'b');
+        xc = chop(x, 'f');
+        xc = chop(xc, 'b');
+        dy = (0.5*F(x(2:n-1)+dx) - 0.5*F(x(2:n-1)-dx))./dx;
+    case 'o3'
+        dx = chop(dx, 'b');
+        xc = chop(x, 'f');
+        xc = chop(xc, 'b');
+        dy = ((1/24)*F(x(2:n-1)-(3/2)*dx) - (27/24)*F(x(2:n-1)-(1/2)*dx) ...
+            + (27/24)*F(x(2:n-1)+(1/2)*dx) - (1/24)*F(x(2:n-1)+(3/2)*dx))./dx;
+    case 'o4'
+        dx = chop(dx, 'f');
+        dx = chop(dx, 'b');
+        xc = chop(x, 'f');
+        xc = chop(xc, 'b');
+        xc = chop(xc, 'b');        
+        dy = ((1/12)*F(x(2:n-2)-2*dx) - (2/3)*F(x(2:n-2)-dx) ...
+            + (2/3)*F(x(2:n-2)+dx) - (1/12)*F(x(2:n-2)+2*dx))./dx;        
     case 'data'
         return;
     otherwise
