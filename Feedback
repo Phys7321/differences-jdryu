@@ -1,0 +1,3 @@
+# Feedback
+The MATLAB code is thorough and hits all the major points. However, I would say always check to see that the data are plotted in a readable way especially when using subplots. Several of those graphs are so small that the legend blocks all the information
+In Python, you should always include code that runs your modifications. While the modifications you made to *myder* look great - I want to make sure everyone knows how to run these programs.
