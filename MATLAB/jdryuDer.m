@@ -17,27 +17,33 @@ y = @(x) sin(sin(1./(x.*(2-x))));
 [ddY,ddX] = Der(Y,X,'d2');
 
 figure
-subplot(2,3,1)
 plot(x,y(x))
+title('sin^2(1/(x*(2-x)))')
 legend('y(x)','Location','north')
 
-subplot(2,3,2)
+figure
 plot(dxf,dyf,dxb,dyb,dxc,dyc,dx2,dy2,dx3,dy3,dx4,dy4)
-legend('fd','bd','cd','o2','o3','o4','Location','north')
+title('derivative of sin^2(1/(x*(2-x)))')
+legend('fd','bd','cd','o2','o3','o4','Location','east')
 
-subplot(2,3,3)
+figure
 plot(ddx,ddy)
+title('second derivative of sin^2(1/(x*(2-x)))')
 legend('d2','Location','north')
 
-subplot(2,3,4)
+figure
 plot(X,Y)
+title('derdata')
 legend('Y','Location','north')
 
-subplot(2,3,5)
+figure
 plot(dX,dY)
+title('derivative of derdata')
 legend('d1','Location','north')
 
-subplot(2,3,6)
+figure
 plot(ddX,ddY)
+title('second derivative of derdata')
 legend('d2','Location','north')
+
 
